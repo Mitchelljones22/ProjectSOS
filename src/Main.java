@@ -40,6 +40,21 @@ public class Main extends Application {
         playerOneSButton.setStyle("-fx-text-fill: #E1AD01;");
         playerOneOButton.setStyle("-fx-text-fill: #E1AD01;");
 
+        playerOneSButton.setOnAction(e -> {
+            if (playerOneSButton.isSelected()) {
+                playerOneOButton.setSelected(false);
+                System.out.println("S selected"); // Optional: do something when S is selected
+            }
+        });
+
+        playerOneOButton.setOnAction(e -> {
+            if (playerOneOButton.isSelected()) {
+                playerOneSButton.setSelected(false);
+                System.out.println("S selected"); // Optional: do something when S is selected
+            }
+        });
+
+
 
         CheckBox recordCheckBox = new CheckBox("Record Game");
         recordCheckBox.setStyle("-fx-text-fill: #E1AD01;");
@@ -90,5 +105,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }
