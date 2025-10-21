@@ -32,6 +32,7 @@ public class Main extends Application {
 
         VBox centerVBox = new VBox();
         VBox leftPanelVBox = new VBox();
+        VBox rightPanelVBox = new VBox();
         HBox headerHBox = new HBox();
 
 
@@ -44,7 +45,6 @@ public class Main extends Application {
         playerOneSButton.setOnAction(e -> {
             if (playerOneSButton.isSelected()) {
                 playerOneOButton.setSelected(false);
-                System.out.println("S selected"); // Optional: do something when S is selected
             }
             else{
                 playerOneSButton.setSelected(true);
@@ -54,10 +54,33 @@ public class Main extends Application {
         playerOneOButton.setOnAction(e -> {
             if (playerOneOButton.isSelected()) {
                 playerOneSButton.setSelected(false);
-                System.out.println("O selected"); // Optional: do something when S is selected
             }
             else{
                 playerOneOButton.setSelected(true);
+            }
+        });
+
+        RadioButton playerTwoSButton = new RadioButton("S");
+        RadioButton playerTwoOButton = new RadioButton("O");
+        playerTwoSButton.setStyle("-fx-text-fill: #E1AD01;");
+        playerTwoOButton.setStyle("-fx-text-fill: #E1AD01;");
+        playerTwoSButton.setSelected(true);
+
+        playerTwoSButton.setOnAction(e -> {
+            if (playerTwoSButton.isSelected()) {
+                playerTwoOButton.setSelected(false);
+            }
+            else{
+                playerTwoSButton.setSelected(true);
+            }
+        });
+
+        playerTwoOButton.setOnAction(e -> {
+            if (playerTwoOButton.isSelected()) {
+                playerTwoSButton.setSelected(false);
+            }
+            else{
+                playerTwoOButton.setSelected(true);
             }
         });
 
@@ -68,9 +91,20 @@ public class Main extends Application {
         leftPanelVBox.setAlignment(Pos.CENTER_LEFT);
         leftPanelVBox.setSpacing(10);
         leftPanelVBox.layoutYProperty().bind(
-                rootPane.heightProperty().divide(2).subtract(leftPanelVBox.widthProperty().divide(2))
+                rootPane.heightProperty().divide(2).subtract(leftPanelVBox.heightProperty().divide(2))
         );
         leftPanelVBox.setLayoutX(25);
+
+        rightPanelVBox.getChildren().addAll(playerTwoSButton, playerTwoOButton);
+        rightPanelVBox.setAlignment(Pos.CENTER_RIGHT);
+        rightPanelVBox.setSpacing(10);
+        rightPanelVBox.layoutYProperty().bind(
+                rootPane.heightProperty().divide(2).subtract(rightPanelVBox.heightProperty().divide(2)).subtract(20)
+        );
+        rightPanelVBox.layoutXProperty().bind(
+                rootPane.widthProperty().subtract(rightPanelVBox.widthProperty()).subtract(25)
+        );
+
 
         headerHBox.getChildren().add(mainTextField);
         headerHBox.setAlignment(Pos.CENTER);
@@ -113,7 +147,7 @@ public class Main extends Application {
                 rootPane.heightProperty().divide(2).subtract(boardGridPane.heightProperty().divide(2))
         );
 
-        rootPane.getChildren().addAll(headerHBox, leftPanelVBox, boardGridPane);
+        rootPane.getChildren().addAll(headerHBox, leftPanelVBox, rightPanelVBox, boardGridPane);
 
         Scene mainScene = new Scene(rootPane, screenWidth, screenHeight);
         mainScene.setFill(GREEN);
