@@ -4,14 +4,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import javax.swing.*;
 
 import static javafx.scene.paint.Color.*;
 
@@ -35,44 +34,35 @@ public class Main extends Application {
         VBox leftPanelVBox = new VBox();
         HBox headerHBox = new HBox();
 
+
         RadioButton playerOneSButton = new RadioButton("S");
         RadioButton playerOneOButton = new RadioButton("O");
         playerOneSButton.setStyle("-fx-text-fill: #E1AD01;");
         playerOneOButton.setStyle("-fx-text-fill: #E1AD01;");
+        playerOneSButton.setSelected(true);
 
         playerOneSButton.setOnAction(e -> {
             if (playerOneSButton.isSelected()) {
                 playerOneOButton.setSelected(false);
                 System.out.println("S selected"); // Optional: do something when S is selected
             }
+            else{
+                playerOneSButton.setSelected(true);
+            }
         });
 
         playerOneOButton.setOnAction(e -> {
             if (playerOneOButton.isSelected()) {
                 playerOneSButton.setSelected(false);
-                System.out.println("S selected"); // Optional: do something when S is selected
+                System.out.println("O selected"); // Optional: do something when S is selected
+            }
+            else{
+                playerOneOButton.setSelected(true);
             }
         });
 
-
-
         CheckBox recordCheckBox = new CheckBox("Record Game");
         recordCheckBox.setStyle("-fx-text-fill: #E1AD01;");
-
-        Line newLine = new Line();
-        newLine.setStartX(centerWidth / 2);
-        newLine.setStartY(centerHeight / 2);
-        newLine.setEndX(50);
-        newLine.setEndY(50);
-        newLine.setStroke(Color.BLUE);
-
-        Line secondLine = new Line();
-        secondLine.setStartX(screenWidth - (centerWidth / 2));
-        secondLine.setStartY(centerHeight / 2);
-        secondLine.setEndX(screenWidth - 50);
-        secondLine.setEndY(50);
-        newLine.setStroke(Color.RED);
-
 
         leftPanelVBox.getChildren().addAll(playerOneSButton, playerOneOButton, recordCheckBox);
         leftPanelVBox.setAlignment(Pos.CENTER_LEFT);
@@ -85,15 +75,45 @@ public class Main extends Application {
         headerHBox.getChildren().add(mainTextField);
         headerHBox.setAlignment(Pos.CENTER);
 
-        //double widthHeaderHBox = headerHBox.getBoundsInLocal().getWidth();
-
         //binds to center of screen dynamically
         headerHBox.layoutXProperty().bind(
                 rootPane.widthProperty().divide(2).subtract(headerHBox.widthProperty().divide(2))
         );
         headerHBox.setLayoutY(25);
 
-        rootPane.getChildren().addAll(headerHBox, leftPanelVBox, newLine, secondLine);
+
+        GameBoard boardMain = new GameBoard();
+        GridPane boardGridPane = new GridPane();
+        boardGridPane.setAlignment(Pos.CENTER);
+        boardGridPane.setHgap(2);
+        boardGridPane.setVgap(2);
+
+        for(int x = 0; x < 3; x++){
+            for(int y = 0; y < 3; y++){
+                BoardTile tile = boardMain.getCell(x, y);
+                tile.setPrefSize(60, 60);
+
+                tile.setOnMouseClicked(e -> {
+                    String selectedLetter = playerOneSButton.isSelected() ? "S" : "O";
+                    GameBoard.activeTurn currentTurn = boardMain.getTurn();
+
+                    tile.handleMouseClick(selectedLetter, currentTurn);
+                    boardMain.switchTurn();
+                });
+
+                boardGridPane.add(tile, y, x);
+            }
+        }
+
+        // Position the board in the center
+        boardGridPane.layoutXProperty().bind(
+                rootPane.widthProperty().divide(2).subtract(boardGridPane.widthProperty().divide(2))
+        );
+        boardGridPane.layoutYProperty().bind(
+                rootPane.heightProperty().divide(2).subtract(boardGridPane.heightProperty().divide(2))
+        );
+
+        rootPane.getChildren().addAll(headerHBox, leftPanelVBox, boardGridPane);
 
         Scene mainScene = new Scene(rootPane, screenWidth, screenHeight);
         mainScene.setFill(GREEN);
