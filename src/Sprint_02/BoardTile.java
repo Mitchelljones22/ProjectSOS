@@ -1,3 +1,5 @@
+package Sprint_02;
+
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
@@ -24,10 +26,10 @@ public class BoardTile extends StackPane {
         if (isEmpty) {
             setLetter(letterToPlace);
 
-            if (currentTurn == GameBoard.activeTurn.PLAYER_ONE) {
-                setStyle("-fx-border-color: white; -fx-background-color: grey;");
+            if (currentTurn == GameBoard.activeTurn.Player_One) {
+                setStyle("-fx-border-color: white; -fx-background-color: Blue;");
             } else {
-                setStyle("-fx-border-color: white; -fx-background-color: grey;");
+                setStyle("-fx-border-color: white; -fx-background-color: Red;");
             }
         }
     }

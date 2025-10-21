@@ -1,14 +1,15 @@
+package Sprint_02;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -28,37 +29,71 @@ public class Main extends Application {
         rootPane.setStyle("-fx-background-color: #006400;");
 
         Text mainTextField = new Text("Project SOS");
-        mainTextField.setStyle("-fx-font-family: 'High Tower Text';"
-        + "-fx-font-size: 24px;"
-        + "-fx-fill: #E1AD01;");
+        mainTextField.setStyle(
+                "-fx-font-family: 'High Tower Text';"
+                + "-fx-font-size: 24px;"
+                + "-fx-fill: #E1AD01;"
+        );
 
+        GameBoard boardMain = new GameBoard();
+        GridPane boardGridPane = new GridPane();
 
+        //VBox and HBox creation
         VBox centerVBox = new VBox();
         VBox leftPanelVBox = new VBox();
         VBox rightPanelVBox = new VBox();
-        HBox topPanelHBox = new HBox();
         VBox headerVBox = new VBox();
+        VBox bottomVBox = new VBox();
+        HBox topPanelHBox = new HBox();
 
-        TextField boardSizeTxt = new TextField("3");
-        boardSizeTxt.setStyle("-fx-font-family: 'High Tower Text';"
-        + "-fx-font-size: 12px;"
-        + "-fx-fill: #E1AD01;");
-        boardSizeTxt.setPrefColumnCount(1);
+        //Dropdown box for board size
+        ComboBox<Integer> boardSizeComboBox = new ComboBox<Integer>();
+        boardSizeComboBox.getItems().addAll(3, 4, 5, 6, 7, 8, 9, 10);
+        boardSizeComboBox.setStyle(
+                "-fx-font-family: 'High Tower Text';"
+                + "-fx-font-size: 14px;"
+                + "-fx-fill: #E1AD01;"
+        );
+        boardSizeComboBox.setTranslateY(-3);
+        boardSizeComboBox.setValue(3);
 
+        //Text label next to dropdown
         Text boardSizeLabel = new Text("Board Size");
-        boardSizeLabel.setStyle("-fx-font-family: 'High Tower Text';"
+        boardSizeLabel.setStyle(
+                "-fx-font-family: 'High Tower Text';"
                 + "-fx-font-size: 16px;"
-                + "-fx-fill: #E1AD01;");
+                + "-fx-fill: #E1AD01;"
+        );
+        boardSizeLabel.setTranslateY(3);
 
+        // Top Panel HBox contains Title and Game settings
         topPanelHBox.setAlignment(Pos.TOP_CENTER);
         topPanelHBox.setPadding(new Insets(15));
         topPanelHBox.setSpacing(15);
 
+        //Text at the bottom of the screen displaying turn and game mode
+        Text statusTXT = new Text("Status: " + boardMain.getTurn());
+        statusTXT.setStyle(
+                "-fx-font-family: 'High Tower Text';"
+                + "-fx-font-size: 16px;"
+                + "-fx-fill: #E1AD01;");
+
+        bottomVBox.getChildren().addAll(statusTXT);
+        bottomVBox.setAlignment(Pos.BOTTOM_CENTER);
+
 
         RadioButton simpleGameButton = new RadioButton("Simple Game");
         RadioButton generalGameButton = new RadioButton("General Game");
-        simpleGameButton.setStyle("-fx-text-fill: #E1AD01;");
-        generalGameButton.setStyle("-fx-text-fill: #E1AD01;");
+        simpleGameButton.setStyle(
+                "-fx-text-fill: #E1AD01;"
+                        + "-fx-font-family: 'High Tower Text';"
+                        + "-fx-font-size: 14px;"
+        );
+        generalGameButton.setStyle(
+                "-fx-text-fill: #E1AD01;"
+                + "-fx-font-family: 'High Tower Text';"
+                + "-fx-font-size: 14px;"
+        );
         simpleGameButton.setSelected(true);
 
         simpleGameButton.setOnAction(e -> {
@@ -79,7 +114,7 @@ public class Main extends Application {
             }
         });
         
-        topPanelHBox.getChildren().addAll(simpleGameButton, generalGameButton, boardSizeLabel, boardSizeTxt);
+        topPanelHBox.getChildren().addAll(simpleGameButton, generalGameButton, boardSizeLabel, boardSizeComboBox);
 
 
 
@@ -162,8 +197,11 @@ public class Main extends Application {
         );
         headerVBox.setLayoutY(25);
 
-        GameBoard boardMain = new GameBoard();
-        GridPane boardGridPane = new GridPane();
+        bottomVBox.layoutXProperty().bind(
+                rootPane.widthProperty().divide(2).subtract(bottomVBox.widthProperty().divide(2))
+        );
+        bottomVBox.layoutYProperty().bind(rootPane.heightProperty().subtract(50));
+
         boardGridPane.setAlignment(Pos.CENTER);
         boardGridPane.setHgap(2);
         boardGridPane.setVgap(2);
@@ -193,7 +231,7 @@ public class Main extends Application {
                 rootPane.heightProperty().divide(2).subtract(boardGridPane.heightProperty().divide(2))
         );
 
-        rootPane.getChildren().addAll(headerVBox, leftPanelVBox, rightPanelVBox, boardGridPane);
+        rootPane.getChildren().addAll(headerVBox, leftPanelVBox, rightPanelVBox, boardGridPane, bottomVBox);
 
         Scene mainScene = new Scene(rootPane, screenWidth, screenHeight);
         mainScene.setFill(GREEN);

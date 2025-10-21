@@ -1,13 +1,15 @@
+package Sprint_02;
+
 public class GameBoard {
 
-    public enum activeTurn { PLAYER_ONE, PLAYER_TWO }
+    public enum activeTurn { Player_One, Player_Two }
 
     private BoardTile[][] grid;
     private activeTurn turn;
 
     public GameBoard() {
         grid = new BoardTile[3][3];
-        turn = activeTurn.PLAYER_ONE;
+        turn = activeTurn.Player_One;
         initializeBoard();
     }
 
@@ -38,10 +40,10 @@ public class GameBoard {
     }
 
     public void switchTurn() {
-        if (turn == activeTurn.PLAYER_ONE) {
-            turn = activeTurn.PLAYER_TWO;
+        if (turn == activeTurn.Player_One) {
+            turn = activeTurn.Player_Two;
         } else {
-            turn = activeTurn.PLAYER_ONE;
+            turn = activeTurn.Player_One;
         }
     }
 
