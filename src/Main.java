@@ -1,8 +1,10 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -15,8 +17,8 @@ import javafx.stage.Stage;
 import static javafx.scene.paint.Color.*;
 
 public class Main extends Application {
-    public static final int screenWidth = 400;
-    public static final int screenHeight = 300;
+    public static final int screenWidth = 500;
+    public static final int screenHeight = 425;
     public static final int centerWidth = screenWidth / 2;
     public static final int centerHeight = screenHeight / 2;
 
@@ -27,13 +29,59 @@ public class Main extends Application {
 
         Text mainTextField = new Text("Project SOS");
         mainTextField.setStyle("-fx-font-family: 'High Tower Text';"
-        + "-fx-font-size: 18px;"
+        + "-fx-font-size: 24px;"
         + "-fx-fill: #E1AD01;");
+
 
         VBox centerVBox = new VBox();
         VBox leftPanelVBox = new VBox();
         VBox rightPanelVBox = new VBox();
-        HBox headerHBox = new HBox();
+        HBox topPanelHBox = new HBox();
+        VBox headerVBox = new VBox();
+
+        TextField boardSizeTxt = new TextField("3");
+        boardSizeTxt.setStyle("-fx-font-family: 'High Tower Text';"
+        + "-fx-font-size: 12px;"
+        + "-fx-fill: #E1AD01;");
+        boardSizeTxt.setPrefColumnCount(1);
+
+        Text boardSizeLabel = new Text("Board Size");
+        boardSizeLabel.setStyle("-fx-font-family: 'High Tower Text';"
+                + "-fx-font-size: 16px;"
+                + "-fx-fill: #E1AD01;");
+
+        topPanelHBox.setAlignment(Pos.TOP_CENTER);
+        topPanelHBox.setPadding(new Insets(15));
+        topPanelHBox.setSpacing(15);
+
+
+        RadioButton simpleGameButton = new RadioButton("Simple Game");
+        RadioButton generalGameButton = new RadioButton("General Game");
+        simpleGameButton.setStyle("-fx-text-fill: #E1AD01;");
+        generalGameButton.setStyle("-fx-text-fill: #E1AD01;");
+        simpleGameButton.setSelected(true);
+
+        simpleGameButton.setOnAction(e -> {
+            if(simpleGameButton.isSelected()) {
+                generalGameButton.setSelected(false);
+            }
+            else{
+                simpleGameButton.setSelected(true);
+            }
+        });
+
+        generalGameButton.setOnAction(e -> {
+            if(generalGameButton.isSelected()) {
+                simpleGameButton.setSelected(false);
+            }
+            else{
+                generalGameButton.setSelected(true);
+            }
+        });
+        
+        topPanelHBox.getChildren().addAll(simpleGameButton, generalGameButton, boardSizeLabel, boardSizeTxt);
+
+
 
 
         RadioButton playerOneSButton = new RadioButton("S");
@@ -105,16 +153,14 @@ public class Main extends Application {
                 rootPane.widthProperty().subtract(rightPanelVBox.widthProperty()).subtract(25)
         );
 
-
-        headerHBox.getChildren().add(mainTextField);
-        headerHBox.setAlignment(Pos.CENTER);
+        headerVBox.getChildren().addAll(mainTextField, topPanelHBox);
+        headerVBox.setAlignment(Pos.CENTER);
 
         //binds to center of screen dynamically
-        headerHBox.layoutXProperty().bind(
-                rootPane.widthProperty().divide(2).subtract(headerHBox.widthProperty().divide(2))
+        headerVBox.layoutXProperty().bind(
+                rootPane.widthProperty().divide(2).subtract(headerVBox.widthProperty().divide(2))
         );
-        headerHBox.setLayoutY(25);
-
+        headerVBox.setLayoutY(25);
 
         GameBoard boardMain = new GameBoard();
         GridPane boardGridPane = new GridPane();
@@ -147,7 +193,7 @@ public class Main extends Application {
                 rootPane.heightProperty().divide(2).subtract(boardGridPane.heightProperty().divide(2))
         );
 
-        rootPane.getChildren().addAll(headerHBox, leftPanelVBox, rightPanelVBox, boardGridPane);
+        rootPane.getChildren().addAll(headerVBox, leftPanelVBox, rightPanelVBox, boardGridPane);
 
         Scene mainScene = new Scene(rootPane, screenWidth, screenHeight);
         mainScene.setFill(GREEN);
