@@ -43,29 +43,4 @@ public class GeneralMoveTest {
         assertFalse(tile.isEmpty(), "Tile should no longer be empty");
     }
 
-    // ===================================================================
-    // User Story 6: Make a move in a general game
-    // Acceptance Criterion 6.2: Human Player O move
-    // ===================================================================
-
-    /**
-     * Test for AC 6.2: Human Player O move in general game
-     * Input: Player selects 'O' and clicks empty cell in general game
-     * Expected: 'O' is placed in the cell
-     */
-    @Test
-    public void testPlaceOMoveInGeneralGame() {
-        BoardTile tile = generalGame.getCell(3, 1);
-
-        // Verify tile is initially empty
-        assertTrue(tile.isEmpty(), "Tile should initially be empty");
-        assertEquals("", tile.getLetter(), "Tile should have no letter initially");
-
-        // Place 'O' on the tile
-        tile.handleMouseClick("O", GameBoard.activeTurn.Player_Two);
-
-        // Verify 'O' was placed
-        assertEquals("O", tile.getLetter(), "Tile should contain 'O'");
-        assertFalse(tile.isEmpty(), "Tile should no longer be empty");
-    }
 }

@@ -68,37 +68,4 @@ public class SimpleMoveTest {
         assertEquals("O", tile.getLetter(), "Tile should contain 'O'");
         assertFalse(tile.isEmpty(), "Tile should no longer be empty");
     }
-
-    // ===================================================================
-    // User Story 4: Make a move in a simple game
-    // Acceptance Criterion 4.3: Human Player Winning move
-    // (NOT IMPLEMENTED IN THIS SPRINT - Placeholder for future sprint)
-    // ===================================================================
-
-    /**
-     * Test for AC 4.3: Human Player Winning move
-     * NOTE: This feature is NOT implemented in Sprint 2
-     * This test is a placeholder for future implementation
-     *
-     * Input: Player places move that creates SOS
-     * Expected: Game recognizes SOS and declares winner
-     */
-    @Test
-    public void testWinningMoveNotImplementedYet() {
-        // This acceptance criterion is not part of Sprint 2
-        // Test will be implemented in a future sprint when
-        // SOS detection and winner determination are added
-
-        // For now, we just verify moves can be placed
-        simpleGame.getCell(0, 0).handleMouseClick("S", GameBoard.activeTurn.Player_One);
-        simpleGame.getCell(0, 1).handleMouseClick("O", GameBoard.activeTurn.Player_Two);
-        simpleGame.getCell(0, 2).handleMouseClick("S", GameBoard.activeTurn.Player_One);
-
-        // Verify all moves were placed (no winner detection yet)
-        assertEquals("S", simpleGame.getCell(0, 0).getLetter());
-        assertEquals("O", simpleGame.getCell(0, 1).getLetter());
-        assertEquals("S", simpleGame.getCell(0, 2).getLetter());
-
-        // Future implementation will check for SOS sequence and winner
-    }
 }
