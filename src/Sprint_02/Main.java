@@ -19,8 +19,6 @@ public class Main extends Application {
     public static final int screenHeight = 425;
     public static final int centerWidth = screenWidth / 2;
     public static final int centerHeight = screenHeight / 2;
-    public String selectedGameMode = "Simple";
-    public Integer selectedBoardSize = 3;
     private GameBoard boardMain;
 
     @Override
