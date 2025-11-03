@@ -4,4 +4,18 @@ public class GeneralGame extends SOSGame {
     public GeneralGame(int boardSize){
         super(boardSize);
     }
+    @Override
+    public boolean makeMove(int row, int col, String letter){
+        BoardTile tile = gameBoard.getCell(row, col);
+        return true; //placeholder
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return false;
+    }
+    @Override
+    public GameBoard.activeTurn getWinner() {
+        return(gameInformation.getWinner());
+    }
 }

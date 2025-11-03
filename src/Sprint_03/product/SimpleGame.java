@@ -2,7 +2,20 @@ package Sprint_03.product;
 
 public class SimpleGame extends SOSGame{
     public SimpleGame(int boardSize){
-        this.boardSize = boardSize
+        super(boardSize);
+    }
+    @Override
+    public boolean makeMove(int row, int col, String letter){
+        BoardTile tile = gameBoard.getCell(row, col);
+        return true; //placeholder
     }
 
+    @Override
+    public boolean isGameOver() {
+        return false;
+    }
+    @Override
+    public GameBoard.activeTurn getWinner() {
+        return(gameInformation.getWinner());
+    }
 }

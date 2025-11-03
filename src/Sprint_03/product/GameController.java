@@ -38,11 +38,10 @@ public class GameController {
     }
     
     public GameBoard getBoard() {
-        return currentGame.getBoard();
+        return currentGame.getGameBoard();
     }
 
-    public GameInformation
-    getGameInformation() {
+    public GameInformation getGameInformation() {
         return currentGame.getGameInformation();
     }
 
@@ -60,6 +59,6 @@ public class GameController {
     }
 
     public int getBoardSize() {
-        return currentGame.getBoard().getBoardSize();
+        return currentGame.getGameBoard().getBoardSize();
     }
 }

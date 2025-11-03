@@ -291,8 +291,8 @@ public class MainUI extends Application {
 
 
     private void updateStatusText(Text statusText) {
-        GameInformation state = gameController.getGameState();
-        SOSGAME currentGame = gameController.getCurrentGame();
+        GameInformation state = gameController.getGameInformation();
+        SOSGame currentGame = gameController.getCurrentGame();
 
         StringBuilder status = new StringBuilder();
         status.append("Status: ").append(gameController.getCurrentTurn());
