@@ -23,9 +23,11 @@ public abstract class SOSGame {
     public GameBoard getGameBoard() {
         return gameBoard;
     }
+
     public GameInformation getGameInformation() {
         return gameInformation;
     }
+
     public GameBoard.activeTurn getCurrentTurn() {
         return gameInformation.getCurrentTurn();
     }

@@ -142,15 +142,14 @@ public class MainUI extends Application {
         replayButton.setPrefSize(90,10);
 
         newGameButton.setOnAction(event -> {
-            // ✅ KEEP - Get UI selections
             int boardSize = boardSizeComboBox.getValue();
-            GameBoard.gameMode mode;
+            GameBoard.gameMode gameMode;
             if (simpleGameButton.isSelected()) {
-                mode = GameBoard.gameMode.Simple;
+                gameMode = GameBoard.gameMode.Simple;
             } else {
-                mode = GameBoard.gameMode.General;
+                gameMode = GameBoard.gameMode.General;
             }
-            gameController.startNewGame(mode, boardSize);
+            gameController.startNewGame(gameMode, boardSize);
 
             buildBoard(boardGridPane, playerOneSButton, playerOneOButton,
                     playerTwoSButton, playerTwoOButton, statusTXT);
@@ -250,7 +249,6 @@ public class MainUI extends Application {
                         return;
                     }
 
-
                     String selectedLetter;
 
                     if (gameController.getCurrentTurn() == GameBoard.activeTurn.Player_One) {
@@ -268,24 +266,18 @@ public class MainUI extends Application {
                         }
                     }
 
-
                     boolean moveSuccess = gameController.handleMove(row, col, selectedLetter);
 
                     if (moveSuccess) {
-
                         updateStatusText(statusText);
-
-
                         if (gameController.isGameOver()) {
                             showGameOverAlert();
                         }
                     }
                 });
-
                 gridPane.add(tile, col, row);
             }
         }
-
         updateStatusText(statusText);
     }
 

@@ -7,7 +7,7 @@ public class GameBoard {
     private BoardTile[][] grid;
     private int boardSize;
 
-    public GameBoard(int boardsize) {
+    public GameBoard(int boardSize) {
         this.boardSize = boardSize;
         this.grid = new BoardTile[boardSize][boardSize];
         initializeBoard();
@@ -28,7 +28,6 @@ public class GameBoard {
     public void setCell(int row, int column, BoardTile tile) {
         grid[row][column] = tile;
     }
-
 
     public void reset() {
         for (int i = 0; i < grid.length; i++) {

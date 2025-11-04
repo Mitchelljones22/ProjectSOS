@@ -7,7 +7,16 @@ public class GeneralGame extends SOSGame {
     @Override
     public boolean makeMove(int row, int col, String letter){
         BoardTile tile = gameBoard.getCell(row, col);
-        return true; //placeholder
+
+        if (!tile.isEmpty()) {
+            return false;
+        }
+
+        tile.setLetter(letter);
+        tile.setPlayerColor(gameInformation.getCurrentTurn());
+
+        gameInformation.switchTurn();
+        return true;
     }
 
     @Override
