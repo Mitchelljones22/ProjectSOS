@@ -14,6 +14,9 @@ public class SimpleGame extends SOSGame{
 
         tile.setLetter(letter);
         tile.setPlayerColor(gameInformation.getCurrentTurn());
+        System.out.println("Row" + row + " Col" + col);
+
+        GameLogic.HorizontalSOSCheck(gameBoard, row, col, letter);
 
         gameInformation.switchTurn();
         GameLogic.isBoardFull(gameBoard);
