@@ -24,7 +24,6 @@ public class GameController {
         return currentGame;
     }
 
-
     public boolean isGameOver() {
         return currentGame.isGameOver();
     }
@@ -38,6 +37,7 @@ public class GameController {
     }
     
     public GameBoard getBoard() {
+
         return currentGame.getGameBoard();
     }
 
