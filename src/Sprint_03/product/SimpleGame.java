@@ -16,7 +16,10 @@ public class SimpleGame extends SOSGame{
         tile.setPlayerColor(gameInformation.getCurrentTurn());
 
         gameInformation.switchTurn();
-        GameLogic.isBoardFull(gameBoard);
+        if(GameLogic.isBoardFull(gameBoard)){
+            getGameInformation().setGameOver(true);
+            System.out.println("Game Over");
+        }
         return true;
     }
 
