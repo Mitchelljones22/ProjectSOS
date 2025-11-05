@@ -22,13 +22,6 @@ public class BoardTile extends StackPane {
         this.getChildren().add(letter);
     }
 
-    public void setPlayerColor(GameBoard.activeTurn currentTurn) {
-        if (currentTurn == GameBoard.activeTurn.Player_One) {
-            setStyle("-fx-border-color: white; -fx-background-color: Blue;");
-        } else {
-            setStyle("-fx-border-color: white; -fx-background-color: Red;");
-        }
-    }
 
     /**
      * Set the letter on this tile

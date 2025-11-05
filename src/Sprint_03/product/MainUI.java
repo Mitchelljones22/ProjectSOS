@@ -9,8 +9,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static javafx.scene.paint.Color.GREEN;
 
@@ -152,7 +156,7 @@ public class MainUI extends Application {
             gameController.startNewGame(gameMode, boardSize);
 
             buildBoard(boardGridPane, playerOneSButton, playerOneOButton,
-                    playerTwoSButton, playerTwoOButton, statusTXT);
+                    playerTwoSButton, playerTwoOButton, statusTXT, rootPane);
         });
 
         buttonVBox.getChildren().addAll(replayButton, newGameButton);
@@ -204,7 +208,7 @@ public class MainUI extends Application {
 
         // Build the initial board
         buildBoard(boardGridPane, playerOneSButton, playerOneOButton,
-                playerTwoSButton, playerTwoOButton, statusTXT);
+                playerTwoSButton, playerTwoOButton, statusTXT, rootPane);
 
 
         // Position the board in the center
@@ -228,7 +232,7 @@ public class MainUI extends Application {
     private void buildBoard(GridPane gridPane,
                             RadioButton p1S, RadioButton p1O,
                             RadioButton p2S, RadioButton p2O,
-                            Text statusText) {
+                            Text statusText,Pane rootPane) {
 
         gridPane.getChildren().clear();
 
@@ -245,39 +249,29 @@ public class MainUI extends Application {
 
                 tile.setOnMouseClicked(e -> {
                     if (gameController.isGameOver()) {
-                        showGameOverAlert();
                         return;
                     }
 
                     String selectedLetter;
 
                     if (gameController.getCurrentTurn() == GameBoard.activeTurn.Player_One) {
-                        if (p1S.isSelected()) {
-                            selectedLetter = "S";
-                        } else {
-                            selectedLetter = "O";
-                        }
+                        selectedLetter = p1S.isSelected() ? "S" : "O";
                     }
                     else {
-                        if (p2S.isSelected()) {
-                            selectedLetter = "S";
-                        } else {
-                            selectedLetter = "O";
-                        }
+                        selectedLetter = p2S.isSelected() ? "S" : "O";
                     }
 
-                    boolean moveSuccess = gameController.handleMove(row, col, selectedLetter);
+                    boolean moveIsSuccess = gameController.handleMove(row, col, selectedLetter);
 
-                    if (moveSuccess) {
+                    if (moveIsSuccess) {
                         updateStatusText(statusText);
-                        if (gameController.isGameOver()) {
-                            showGameOverAlert();
-                        }
+                        drawSOSLines(gridPane, rootPane);  // Pass rootPane
                     }
                 });
                 gridPane.add(tile, col, row);
             }
         }
+        drawSOSLines(gridPane, rootPane);  // Pass rootPane
         updateStatusText(statusText);
     }
 
@@ -287,33 +281,65 @@ public class MainUI extends Application {
         SOSGame currentGame = gameController.getCurrentGame();
 
         StringBuilder status = new StringBuilder();
-        status.append("Status: ").append(gameController.getCurrentTurn());
 
-        if (currentGame instanceof SimpleGame) {
-            status.append("   Mode: Simple");
-        } else if (currentGame instanceof GeneralGame) {
-            status.append("   Mode: General");
-            status.append("   P1: ").append(state.getPlayerOneScore());
-            status.append("   P2: ").append(state.getPlayerTwoScore());
+        if (gameController.isGameOver()) {
+            GameBoard.activeTurn winner = gameController.getWinner();
+            if (winner == null) {
+                status.append("Game Over - Draw!");
+            } else {
+                status.append("Game Over - ").append(winner).append(" Wins!");
+            }
+        }
+        else // Game is still in progress
+        {
+            status.append("Status: ").append(gameController.getCurrentTurn());
+
+            if (currentGame instanceof SimpleGame) {
+                status.append("   Mode: Simple");
+            } else if (currentGame instanceof GeneralGame) {
+                status.append("   Mode: General");
+                status.append("   P1: ").append(state.getPlayerOneScore());
+                status.append("   P2: ").append(state.getPlayerTwoScore());
+            }
         }
 
         statusText.setText(status.toString());
     }
 
 
-    private void showGameOverAlert() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText("The game has ended!");
+    public void drawSOSLines(GridPane gridPane, Pane rootPane) {
+        // Remove old lines from rootPane
+        rootPane.getChildren().removeIf(node -> node instanceof Line);
 
-        GameBoard.activeTurn winner = gameController.getWinner();
-        if (winner == null) {
-            alert.setContentText("It's a draw!");
-        } else {
-            alert.setContentText(winner + " wins!");
+        List<SOSLine> lineList = gameController.getGameInformation().getSOSLines();
+
+        // Get GridPane's position on screen
+        double gridX = gridPane.getLayoutX();
+        double gridY = gridPane.getLayoutY();
+
+        for (SOSLine sosLine : lineList) {
+            int tileSize = 60;
+            int gap = 2;
+
+            // Calculate line positions relative to GridPane
+            double startX = sosLine.getStartCol() * (tileSize + gap) + tileSize / 2;
+            double startY = sosLine.getStartRow() * (tileSize + gap) + tileSize / 2;
+            double endX = sosLine.getEndCol() * (tileSize + gap) + tileSize / 2;
+            double endY = sosLine.getEndRow() * (tileSize + gap) + tileSize / 2;
+
+            // Add GridPane offset to draw in correct position on rootPane
+            Line line = new Line(
+                    startX + gridX,
+                    startY + gridY,
+                    endX + gridX,
+                    endY + gridY
+            );
+            line.setStroke(sosLine.getColor());
+            line.setStrokeWidth(3);
+
+            // Add to rootPane, NOT gridPane!
+            rootPane.getChildren().add(line);
         }
-
-        alert.showAndWait();
     }
 
     public static void main(String[] args) {
