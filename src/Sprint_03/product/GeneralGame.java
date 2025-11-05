@@ -30,6 +30,7 @@ public class GeneralGame extends SOSGame {
                 gameInformation.incrementScore(gameInformation.getCurrentTurn());
             }
             gameInformation.addSOSLines(result.sosLines);
+            gameInformation.switchTurn();
         }
         else{
             gameInformation.switchTurn();
