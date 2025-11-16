@@ -1,4 +1,4 @@
-package Sprint_03.product;
+package Sprint_04.product;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -107,6 +107,22 @@ public class MainUI extends Application {
 
         topPanelHBox.getChildren().addAll(simpleGameButton, generalGameButton, boardSizeLabel, boardSizeComboBox);
 
+        //Player One label
+        Text playerOneLabel = new Text("Blue Player");
+        playerOneLabel.setStyle(
+                "-fx-fill: #0137f8;"
+                        + "-fx-font-family: 'High Tower Text';"
+                        + "-fx-font-size: 16px;"
+        );
+
+        //Player Two label
+        Text playerTwoLabel = new Text("Red Player");
+        playerTwoLabel.setStyle(
+                "-fx-fill: #8e0d0d;"
+                        + "-fx-font-family: 'High Tower Text';"
+                        + "-fx-font-size: 16px;"
+        );
+
         //Player One radio buttons
         ToggleGroup playerOneGroup = new ToggleGroup();
         RadioButton playerOneSButton = new RadioButton("S");
@@ -156,7 +172,7 @@ public class MainUI extends Application {
             gameController.startNewGame(gameMode, boardSize);
 
             buildBoard(boardGridPane, playerOneSButton, playerOneOButton,
-                    playerTwoSButton, playerTwoOButton, statusTXT, rootPane);
+                    playerTwoSButton, playerTwoOButton, playerOneLabel, playerTwoLabel, statusTXT, rootPane);
         });
 
         buttonVBox.getChildren().addAll(replayButton, newGameButton);
@@ -170,7 +186,7 @@ public class MainUI extends Application {
         );
 
 
-        leftPanelVBox.getChildren().addAll(playerOneSButton, playerOneOButton, recordCheckBox);
+        leftPanelVBox.getChildren().addAll(playerOneLabel,playerOneSButton, playerOneOButton, recordCheckBox);
         leftPanelVBox.setAlignment(Pos.CENTER_LEFT);
         leftPanelVBox.setSpacing(10);
         leftPanelVBox.layoutYProperty().bind(
@@ -178,7 +194,7 @@ public class MainUI extends Application {
         );
         leftPanelVBox.setLayoutX(25);
 
-        rightPanelVBox.getChildren().addAll(playerTwoSButton, playerTwoOButton);
+        rightPanelVBox.getChildren().addAll(playerTwoLabel, playerTwoSButton, playerTwoOButton);
         rightPanelVBox.setAlignment(Pos.CENTER_RIGHT);
         rightPanelVBox.setSpacing(10);
         rightPanelVBox.layoutYProperty().bind(
@@ -208,7 +224,7 @@ public class MainUI extends Application {
 
         // Build the initial board
         buildBoard(boardGridPane, playerOneSButton, playerOneOButton,
-                playerTwoSButton, playerTwoOButton, statusTXT, rootPane);
+                playerTwoSButton, playerTwoOButton, playerOneLabel, playerTwoLabel, statusTXT, rootPane);
 
 
         // Position the board in the center
@@ -232,12 +248,25 @@ public class MainUI extends Application {
     private void buildBoard(GridPane gridPane,
                             RadioButton p1S, RadioButton p1O,
                             RadioButton p2S, RadioButton p2O,
+                            Text playerOneLabel, Text playerTwoLabel,
                             Text statusText,Pane rootPane) {
 
         gridPane.getChildren().clear();
 
         GameBoard board = gameController.getBoard();
         int boardSize = board.getBoardSize();
+
+        playerOneLabel.setStyle(
+                "-fx-fill: #0137f8; "
+                        + "-fx-font-family: 'High Tower Text'; "
+                        + "-fx-font-size: 16px;"
+        );
+
+        playerTwoLabel.setStyle(
+                "-fx-fill: #8e0d0d;"
+                        + "-fx-font-family: 'High Tower Text';"
+                        + "-fx-font-size: 16px;"
+        );
 
         for(int x = 0; x < boardSize; x++){
             for(int y = 0; y < boardSize; y++){
@@ -255,10 +284,41 @@ public class MainUI extends Application {
                     String selectedLetter;
 
                     if (gameController.getCurrentTurn() == GameBoard.activeTurn.Player_One) {
-                        selectedLetter = p1S.isSelected() ? "S" : "O";
-                    }
-                    else {
-                        selectedLetter = p2S.isSelected() ? "S" : "O";
+                        playerTwoLabel.setStyle(
+                                "-fx-fill: #ff1a1a; "
+                                        + "-fx-font-family: 'High Tower Text'; "
+                                        + "-fx-font-size: 16px;"
+                        );
+
+                        playerOneLabel.setStyle(
+                                "-fx-fill: rgba(12,7,165,0.85);"
+                                        + "-fx-font-family: 'High Tower Text';"
+                                        + "-fx-font-size: 16px;"
+                        );
+
+                        if (p1S.isSelected()) {
+                            selectedLetter = "S";
+                        } else {
+                            selectedLetter = "O";
+                        }
+                    } else {
+                        playerOneLabel.setStyle(
+                                "-fx-fill: #0137f8; "
+                                        + "-fx-font-family: 'High Tower Text'; "
+                                        + "-fx-font-size: 16px;"
+                        );
+
+                        playerTwoLabel.setStyle(
+                                "-fx-fill: #8e0d0d;"
+                                        + "-fx-font-family: 'High Tower Text';"
+                                        + "-fx-font-size: 16px;"
+                        );
+
+                        if (p2S.isSelected()) {
+                            selectedLetter = "S";
+                        } else {
+                            selectedLetter = "O";
+                        }
                     }
 
                     boolean moveIsSuccess = gameController.handleMove(row, col, selectedLetter);
@@ -347,3 +407,5 @@ public class MainUI extends Application {
 
     }
 }
+
+
