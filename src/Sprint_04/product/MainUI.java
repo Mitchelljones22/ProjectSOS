@@ -123,6 +123,28 @@ public class MainUI extends Application {
                         + "-fx-font-size: 16px;"
         );
 
+        //Player One Human or Computer buttons
+        ToggleGroup playerOneComputerToggleGroup = new ToggleGroup();
+        RadioButton playerOneHumanRadioButton = new RadioButton("Human");
+        RadioButton playerOneComputerRadioButton = new RadioButton("Computer");
+        playerOneHumanRadioButton.setStyle("-fx-text-fill: #E1AD01;");
+        playerOneComputerRadioButton.setStyle("-fx-text-fill: #E1AD01;");
+        playerOneHumanRadioButton.setToggleGroup(playerOneComputerToggleGroup);
+        playerOneComputerRadioButton.setToggleGroup(playerOneComputerToggleGroup);
+        playerOneHumanRadioButton.setSelected(true);
+
+        //Player Two Human or Computer buttons
+        ToggleGroup playerTwoComputerToggleGroup = new ToggleGroup();
+        RadioButton playerTwoHumanRadioButton = new RadioButton("Human");
+        RadioButton playerTwoComputerRadioButton = new RadioButton("Computer");
+        playerTwoHumanRadioButton.setStyle("-fx-text-fill: #E1AD01;");
+        playerTwoComputerRadioButton.setStyle("-fx-text-fill: #E1AD01;");
+        playerTwoHumanRadioButton.setToggleGroup(playerTwoComputerToggleGroup);
+        playerTwoComputerRadioButton.setToggleGroup(playerTwoComputerToggleGroup);
+        playerTwoHumanRadioButton.setSelected(true);
+        playerTwoComputerRadioButton.setTranslateX(15);
+
+
         //Player One radio buttons
         ToggleGroup playerOneGroup = new ToggleGroup();
         RadioButton playerOneSButton = new RadioButton("S");
@@ -132,6 +154,8 @@ public class MainUI extends Application {
         playerOneSButton.setToggleGroup(playerOneGroup);
         playerOneOButton.setToggleGroup(playerOneGroup);
         playerOneSButton.setSelected(true);
+        playerOneSButton.setTranslateX(20);
+        playerOneOButton.setTranslateX(20);
 
         //Player Two radio buttons
         ToggleGroup playerTwoGroup = new ToggleGroup();
@@ -142,6 +166,9 @@ public class MainUI extends Application {
         playerTwoSButton.setToggleGroup(playerTwoGroup);
         playerTwoOButton.setToggleGroup(playerTwoGroup);
         playerTwoSButton.setSelected(true);
+        playerTwoSButton.setTranslateX(-10);
+        playerTwoOButton.setTranslateX(-8);
+
 
         CheckBox recordCheckBox = new CheckBox("Record Game");
         recordCheckBox.setStyle("-fx-text-fill: #E1AD01;");
@@ -171,8 +198,11 @@ public class MainUI extends Application {
             }
             gameController.startNewGame(gameMode, boardSize);
 
-            buildBoard(boardGridPane, playerOneSButton, playerOneOButton,
-                    playerTwoSButton, playerTwoOButton, playerOneLabel, playerTwoLabel, statusTXT, rootPane);
+            buildBoard(boardGridPane, playerOneSButton, playerOneOButton,  playerTwoSButton, playerTwoOButton,
+                    playerOneHumanRadioButton, playerOneComputerRadioButton,
+                    playerTwoHumanRadioButton, playerTwoComputerRadioButton,
+                    playerOneLabel, playerTwoLabel, statusTXT, rootPane);
+
         });
 
         buttonVBox.getChildren().addAll(replayButton, newGameButton);
@@ -186,7 +216,7 @@ public class MainUI extends Application {
         );
 
 
-        leftPanelVBox.getChildren().addAll(playerOneLabel,playerOneSButton, playerOneOButton, recordCheckBox);
+        leftPanelVBox.getChildren().addAll(playerOneLabel,playerOneHumanRadioButton, playerOneSButton, playerOneOButton, playerOneComputerRadioButton, recordCheckBox);
         leftPanelVBox.setAlignment(Pos.CENTER_LEFT);
         leftPanelVBox.setSpacing(10);
         leftPanelVBox.layoutYProperty().bind(
@@ -194,14 +224,14 @@ public class MainUI extends Application {
         );
         leftPanelVBox.setLayoutX(25);
 
-        rightPanelVBox.getChildren().addAll(playerTwoLabel, playerTwoSButton, playerTwoOButton);
+        rightPanelVBox.getChildren().addAll(playerTwoLabel, playerTwoHumanRadioButton, playerTwoSButton, playerTwoOButton, playerTwoComputerRadioButton);
         rightPanelVBox.setAlignment(Pos.CENTER_RIGHT);
         rightPanelVBox.setSpacing(10);
         rightPanelVBox.layoutYProperty().bind(
                 rootPane.heightProperty().divide(2).subtract(rightPanelVBox.heightProperty().divide(2)).subtract(20)
         );
         rightPanelVBox.layoutXProperty().bind(
-                rootPane.widthProperty().subtract(rightPanelVBox.widthProperty()).subtract(25)
+                rootPane.widthProperty().subtract(rightPanelVBox.widthProperty()).subtract(50)
         );
 
         headerVBox.getChildren().addAll(mainTextField, topPanelHBox);
@@ -223,8 +253,10 @@ public class MainUI extends Application {
         boardGridPane.setVgap(2);
 
         // Build the initial board
-        buildBoard(boardGridPane, playerOneSButton, playerOneOButton,
-                playerTwoSButton, playerTwoOButton, playerOneLabel, playerTwoLabel, statusTXT, rootPane);
+        buildBoard(boardGridPane, playerOneSButton, playerOneOButton,  playerTwoSButton, playerTwoOButton,
+                playerOneHumanRadioButton, playerOneComputerRadioButton,
+                playerTwoHumanRadioButton, playerTwoComputerRadioButton,
+                playerOneLabel, playerTwoLabel, statusTXT, rootPane);
 
 
         // Position the board in the center
@@ -248,6 +280,8 @@ public class MainUI extends Application {
     private void buildBoard(GridPane gridPane,
                             RadioButton p1S, RadioButton p1O,
                             RadioButton p2S, RadioButton p2O,
+                            RadioButton p1Human, RadioButton p1Computer,
+                            RadioButton p2Human, RadioButton p2Computer,
                             Text playerOneLabel, Text playerTwoLabel,
                             Text statusText,Pane rootPane) {
 
