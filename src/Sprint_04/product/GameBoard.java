@@ -16,7 +16,7 @@ public class GameBoard {
     private void initializeBoard(){
         for(int i = 0; i < grid.length; i++){
             for(int j = 0; j < grid[0].length; j++){
-                grid[i][j] = new BoardTile();
+                grid[i][j] = new BoardTile(i, j);
             }
         }
     }

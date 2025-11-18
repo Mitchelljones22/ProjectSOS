@@ -9,6 +9,9 @@ public class GameInformation {
     private int playerTwoScore;
     private boolean isGameOver;
     private GameBoard.activeTurn winner;
+    private Player playerOne;
+    private Player playerTwo;
+
 
     private List<SOSLine> sosLines; // Stores all SOS lines to be displayed by UI
 
@@ -42,6 +45,30 @@ public class GameInformation {
             playerOneScore++;
         } else {
             playerTwoScore++;
+        }
+    }
+
+    public Player getPlayerOne() {
+        return playerOne;
+    }
+
+    public void setPlayerOne(Player playerOne) {
+        this.playerOne = playerOne;
+    }
+
+    public Player getPlayerTwo() {
+        return playerTwo;
+    }
+
+    public void setPlayerTwo(Player playerTwo) {
+        this.playerTwo = playerTwo;
+    }
+
+    public Player getCurrentPlayer() {
+        if (currentTurn == GameBoard.activeTurn.Player_One) {
+            return playerOne;
+        } else {
+            return playerTwo;
         }
     }
 

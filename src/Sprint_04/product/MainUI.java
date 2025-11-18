@@ -1,5 +1,6 @@
 package Sprint_04.product;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,9 +13,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static javafx.scene.paint.Color.GREEN;
 
@@ -132,6 +135,7 @@ public class MainUI extends Application {
         playerOneHumanRadioButton.setToggleGroup(playerOneComputerToggleGroup);
         playerOneComputerRadioButton.setToggleGroup(playerOneComputerToggleGroup);
         playerOneHumanRadioButton.setSelected(true);
+        gameController.getCurrentGame().setPlayerOne(new HumanPlayer(gameController.getBoard(), gameController.getGameInformation())); // Player One starts as human
 
         //Player Two Human or Computer buttons
         ToggleGroup playerTwoComputerToggleGroup = new ToggleGroup();
@@ -143,7 +147,7 @@ public class MainUI extends Application {
         playerTwoComputerRadioButton.setToggleGroup(playerTwoComputerToggleGroup);
         playerTwoHumanRadioButton.setSelected(true);
         playerTwoComputerRadioButton.setTranslateX(15);
-
+        gameController.getCurrentGame().setPlayerTwo(new HumanPlayer(gameController.getBoard(), gameController.getGameInformation())); // Player Two starts as human
 
         //Player One radio buttons
         ToggleGroup playerOneGroup = new ToggleGroup();
@@ -198,10 +202,28 @@ public class MainUI extends Application {
             }
             gameController.startNewGame(gameMode, boardSize);
 
+            if(playerOneComputerRadioButton.isSelected()) {
+                gameController.getCurrentGame().setPlayerOne(new ComputerPlayer(gameController.getBoard(), gameController.getGameInformation()));
+            }
+            else{
+                gameController.getCurrentGame().setPlayerOne(new HumanPlayer(gameController.getBoard(), gameController.getGameInformation()));
+            }
+
+            if(playerTwoComputerRadioButton.isSelected()) {
+                gameController.getCurrentGame().setPlayerTwo(new ComputerPlayer(gameController.getBoard(), gameController.getGameInformation()));
+            }
+            else{
+                gameController.getCurrentGame().setPlayerTwo(new HumanPlayer(gameController.getBoard(), gameController.getGameInformation()));
+            }
+
             buildBoard(boardGridPane, playerOneSButton, playerOneOButton,  playerTwoSButton, playerTwoOButton,
                     playerOneHumanRadioButton, playerOneComputerRadioButton,
                     playerTwoHumanRadioButton, playerTwoComputerRadioButton,
                     playerOneLabel, playerTwoLabel, statusTXT, rootPane);
+
+            handleComputerMoves(boardGridPane, rootPane, statusTXT, playerOneLabel, playerTwoLabel);
+
+
 
         });
 
@@ -289,18 +311,7 @@ public class MainUI extends Application {
 
         GameBoard board = gameController.getBoard();
         int boardSize = board.getBoardSize();
-
-        playerOneLabel.setStyle(
-                "-fx-fill: #0137f8; "
-                        + "-fx-font-family: 'High Tower Text'; "
-                        + "-fx-font-size: 16px;"
-        );
-
-        playerTwoLabel.setStyle(
-                "-fx-fill: #8e0d0d;"
-                        + "-fx-font-family: 'High Tower Text';"
-                        + "-fx-font-size: 16px;"
-        );
+        updatePlayerLabelColors(playerOneLabel, playerTwoLabel);
 
         for(int x = 0; x < boardSize; x++){
             for(int y = 0; y < boardSize; y++){
@@ -318,35 +329,12 @@ public class MainUI extends Application {
                     String selectedLetter;
 
                     if (gameController.getCurrentTurn() == GameBoard.activeTurn.Player_One) {
-                        playerTwoLabel.setStyle(
-                                "-fx-fill: #ff1a1a; "
-                                        + "-fx-font-family: 'High Tower Text'; "
-                                        + "-fx-font-size: 16px;"
-                        );
-
-                        playerOneLabel.setStyle(
-                                "-fx-fill: rgba(12,7,165,0.85);"
-                                        + "-fx-font-family: 'High Tower Text';"
-                                        + "-fx-font-size: 16px;"
-                        );
-
                         if (p1S.isSelected()) {
                             selectedLetter = "S";
                         } else {
                             selectedLetter = "O";
                         }
                     } else {
-                        playerOneLabel.setStyle(
-                                "-fx-fill: #0137f8; "
-                                        + "-fx-font-family: 'High Tower Text'; "
-                                        + "-fx-font-size: 16px;"
-                        );
-
-                        playerTwoLabel.setStyle(
-                                "-fx-fill: #8e0d0d;"
-                                        + "-fx-font-family: 'High Tower Text';"
-                                        + "-fx-font-size: 16px;"
-                        );
 
                         if (p2S.isSelected()) {
                             selectedLetter = "S";
@@ -360,6 +348,8 @@ public class MainUI extends Application {
                     if (moveIsSuccess) {
                         updateStatusText(statusText);
                         drawSOSLines(gridPane, rootPane);  // Pass rootPane
+                        updatePlayerLabelColors(playerOneLabel, playerTwoLabel);
+                        handleComputerMoves(gridPane, rootPane, statusText, playerOneLabel, playerTwoLabel);
                     }
                 });
                 gridPane.add(tile, col, row);
@@ -433,6 +423,68 @@ public class MainUI extends Application {
 
             // Add to rootPane, NOT gridPane!
             rootPane.getChildren().add(line);
+        }
+
+    }
+
+    private void updatePlayerLabelColors(Text playerOneLabel, Text playerTwoLabel) {
+        if (gameController.getCurrentTurn() == GameBoard.activeTurn.Player_One) {
+            // Player Two's turn - highlight Player Two, dim Player One
+            playerOneLabel.setStyle(
+                    "-fx-fill: #0137f8; "
+                            + "-fx-font-family: 'High Tower Text'; "
+                            + "-fx-font-size: 16px;"
+            );
+            playerTwoLabel.setStyle(
+                    "-fx-fill: #8e0d0d;"
+                            + "-fx-font-family: 'High Tower Text';"
+                            + "-fx-font-size: 16px;"
+            );
+
+        } else {
+
+            playerOneLabel.setStyle(
+                    "-fx-fill: rgba(12,7,165,0.85);"
+                            + "-fx-font-family: 'High Tower Text';"
+                            + "-fx-font-size: 16px;"
+            );
+            playerTwoLabel.setStyle(
+                    "-fx-fill: #ff1a1a; "
+                            + "-fx-font-family: 'High Tower Text'; "
+                            + "-fx-font-size: 16px;"
+            );
+        }
+    }
+
+    private void handleComputerMoves(GridPane gridPane, Pane rootPane, Text statusText, Text playerOneLabel, Text playerTwoLabel) {
+        if(gameController.isGameOver() || !((gameController.getCurrentGame().getCurrentPlayer()) instanceof ComputerPlayer)) {
+            return;
+        }
+        else{ //Small time delay before Computer makes move, else Computer vs Computer games will be over instantly
+            PauseTransition pause = new PauseTransition(Duration.millis(1100)); // 500ms = 0.5 second delay
+            pause.setOnFinished(event -> {
+            ComputerPlayer currentComputer = (ComputerPlayer) gameController.getGameInformation().getCurrentPlayer();
+            BoardTile selectedMove = currentComputer.makeMove(gameController.getBoard(), gameController.getGameInformation());
+                if (selectedMove != null) {
+
+                    Random random = new Random();
+                    String randomLetter;
+                    if(random.nextBoolean()) {
+                        randomLetter = "S";
+                    } else {
+                        randomLetter = "O";
+                    }
+                    gameController.handleMove(selectedMove.getXPos(), selectedMove.getYPos(), randomLetter);
+                    updateStatusText(statusText);
+                    updatePlayerLabelColors(playerOneLabel, playerTwoLabel);
+                    drawSOSLines(gridPane, rootPane);
+
+                    handleComputerMoves(gridPane, rootPane, statusText, playerOneLabel, playerTwoLabel);
+
+
+                }
+            });
+            pause.play();
         }
     }
 

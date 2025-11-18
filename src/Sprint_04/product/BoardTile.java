@@ -8,8 +8,11 @@ import javafx.scene.text.Text;
 public class BoardTile extends StackPane {
     private Text letter;
     private boolean isEmpty;
+    private int xPos;
+    private int yPos;
 
-    public BoardTile(){
+    public BoardTile(int xPos, int yPos) {
+
         setStyle("-fx-border-color: white");
         this.setPrefSize(60, 60);
         this.setAlignment(Pos.CENTER);
@@ -19,6 +22,10 @@ public class BoardTile extends StackPane {
         letter.setStyle("-fx-fill: white;");
 
         isEmpty = true;
+
+        this.xPos = xPos;
+        this.yPos = yPos;
+
         this.getChildren().add(letter);
     }
 
@@ -39,6 +46,13 @@ public class BoardTile extends StackPane {
 
     public boolean isEmpty() {
         return isEmpty;
+    }
+
+    public int getXPos() {
+        return xPos;
+    }
+    public int getYPos() {
+        return yPos;
     }
 
     public void clear() {

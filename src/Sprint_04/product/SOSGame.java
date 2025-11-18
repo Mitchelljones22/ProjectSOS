@@ -32,8 +32,24 @@ public abstract class SOSGame {
         return gameInformation.getCurrentTurn();
     }
 
-    public void switchTurn() {
-        gameInformation.switchTurn();
+    public void setPlayerOne(Player player) {
+        gameInformation.setPlayerOne(player);
+    }
+
+    public void setPlayerTwo(Player player) {
+        gameInformation.setPlayerTwo(player);
+    }
+
+    public Player getPlayerOne() {
+        return gameInformation.getPlayerOne();
+    }
+
+    public Player getPlayerTwo() {
+        return gameInformation.getPlayerTwo();
+    }
+
+    public Player getCurrentPlayer() {
+        return gameInformation.getCurrentPlayer();
     }
 
 
