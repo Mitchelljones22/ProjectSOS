@@ -51,6 +51,4 @@ public abstract class SOSGame {
     public Player getCurrentPlayer() {
         return gameInformation.getCurrentPlayer();
     }
-
-
 }

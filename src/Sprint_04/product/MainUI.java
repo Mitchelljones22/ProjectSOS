@@ -253,7 +253,7 @@ public class MainUI extends Application {
                 rootPane.heightProperty().divide(2).subtract(rightPanelVBox.heightProperty().divide(2)).subtract(20)
         );
         rightPanelVBox.layoutXProperty().bind(
-                rootPane.widthProperty().subtract(rightPanelVBox.widthProperty()).subtract(50)
+                rootPane.widthProperty().subtract(rightPanelVBox.widthProperty()).subtract(40)
         );
 
         headerVBox.getChildren().addAll(mainTextField, topPanelHBox);
